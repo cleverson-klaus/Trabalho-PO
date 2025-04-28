@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <title>Lista de Tarefas</title>
+</head>
+<body>
+
+    <h1>Minha Lista de Tarefas</h1>
+
+    <input type="text" id="novaTarefa" placeholder="Digite uma nova tarefa...">
+    <button onclick="adicionarTarefa()">Adicionar</button>
+
+    <ul id="listaTarefas">
+        <!-- Tarefas vão aparecer aqui -->
+    </ul>
+
+    <script>
+        function adicionarTarefa() {
+            const input = document.getElementById("novaTarefa");
+            const tarefa = input.value.trim();
+
+            if (tarefa !== "") {
+                const ul = document.getElementById("listaTarefas");
+                const li = document.createElement("li");
+                li.textContent = tarefa;
+
+                // Criar botão de remover
+                const btn = document.createElement("button");
+                btn.textContent = "Remover";
+                btn.onclick = function() {
+                    ul.removeChild(li);
+                };
+
+                li.appendChild(btn);
+                ul.appendChild(li);
+
+                input.value = ""; // Limpa o campo
+            } else {
+                alert("Digite uma tarefa!");
+            }
+        }
+    </script>
+
+</body>
+</html>
