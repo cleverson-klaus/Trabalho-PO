@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulário com Validação</title>
+    <script>
+        // Array para armazenar os aprovados
+        let aprovados = [];
+
+        function validarFormulario() {
+            var nome = document.forms["meuFormulario"]["nome"].value;
+            var email = document.forms["meuFormulario"]["email"].value;
+            var cpf = document.forms["meuFormulario"]["cpf"].value;
+
+            if (nome == "" || email == "" || cpf == "") {
+                alert("Todos os campos devem ser preenchidos!");
+                return false;
+            }
+
+            if (cpf.length !== 11 || isNaN(cpf)) {
+                alert("O CPF deve conter exatamente 11 dígitos numéricos!");
+                return false;
+            }
+
+            // Adiciona o aprovado à lista
+            aprovados.push({ nome: nome, email: email, cpf: cpf });
+            atualizarListaAprovados();
+
+            alert("Cadastro aprovado!");
+            return false; // Impede o envio do formulário para manter os dados na página
+        }
+
+        function atualizarListaAprovados() {
+            const lista = document.getElementById("listaAprovados");
+            lista.innerHTML = ""; // Limpa a lista
+
+            aprovados.forEach((aprovado, index) => {
+                const item = document.createElement("li");
+                item.innerHTML = `
+                    ${index + 1}. Nome: ${aprovado.nome}, Email: ${aprovado.email}, CPF: ${aprovado.cpf}
+                    <button onclick="editarCadastro(${index})">Editar</button>
+                    <button onclick="removerCadastro(${index})">Remover</button>
+                `;
+                lista.appendChild(item);
+            });
+        }
+
+        function removerCadastro(index) {
+            if (confirm("Tem certeza que deseja remover este cadastro?")) {
+                aprovados.splice(index, 1); // Remove o item do array
+                atualizarListaAprovados(); // Atualiza a lista
+            }
+        }
+
+        function editarCadastro(index) {
+            const aprovado = aprovados[index];
+            const nome = prompt("Editar Nome:", aprovado.nome);
+            const email = prompt("Editar Email:", aprovado.email);
+            const cpf = prompt("Editar CPF:", aprovado.cpf);
+
+            if (nome && email && cpf) {
+                if (cpf.length !== 11 || isNaN(cpf)) {
+                    alert("O CPF deve conter exatamente 11 dígitos numéricos!");
+                    return;
+                }
+
+                aprovados[index] = { nome: nome, email: email, cpf: cpf }; // Atualiza o cadastro
+                atualizarListaAprovados(); // Atualiza a lista
+            } else {
+                alert("Todos os campos devem ser preenchidos!");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Formulário com Validação</h1>
+    <form name="meuFormulario" onsubmit="return validarFormulario()">
+        <label for="nome">Nome:</label><br>
+        <input type="text" id="nome" name="nome"><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email"><br><br>
+
+        <label for="cpf">CPF:</label><br>
+        <input type="text" id="cpf" name="cpf" maxlength="11"><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+    <h2>Lista de Aprovados</h2>
+    <ul id="listaAprovados"></ul>
+</body>
+</html>
